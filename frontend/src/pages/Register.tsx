@@ -27,9 +27,13 @@ export function Register() {
     try {
       await registerUser(data.name, data.email, data.password);
       navigate('/dashboard');
-    } catch (error: any) {
-      setServerError(error.response?.data?.error || 'Erro ao cadastrar');
-    } finally {
+    } catch (err) {
+  const message = err && typeof err === 'object' && 'response' in err
+    ? (err as { response?: { data?: { error?: string } } }).response?.data?.error
+    : null;
+  setServerError(message || 'Erro ao fazer login');
+}
+    finally {
       setIsLoading(false);
     }
   }
