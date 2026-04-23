@@ -1,33 +1,65 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { Dashboard } from './pages/Dashboard';
+import type { ReactNode } from 'react';
 
-function App() {
-  const { isAuthenticated, user, isLoading } = useAuth();
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
 
-  if (isLoading) {
-    return <div>Carregando...</div>;
+function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Task Manager 🚀
-        </h1>
+  return <>{children}</>;
+}
 
-        {isAuthenticated ? (
-          <div>
-            <p className="text-green-600 font-semibold">✓ Autenticado!</p>
-            <p className="text-gray-600 mt-2">Olá, <strong>{user?.name}</strong></p>
-            <p className="text-gray-500 text-sm mt-1">{user?.email}</p>
-          </div>
-        ) : (
-          <div>
-            <p className="text-red-600 font-semibold">✗ Não autenticado</p>
-            <p className="text-gray-600 mt-2">Precisamos criar a tela de login ainda.</p>
-          </div>
-        )}
-      </div>
-    </div>
+function PublicRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
