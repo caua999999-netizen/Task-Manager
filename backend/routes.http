@@ -1,0 +1,212 @@
+### Teste: API rodando
+GET http://localhost:3333/
+
+###
+
+### Cadastrar usuário
+POST http://localhost:3333/auth/register
+Content-Type: application/json
+
+{
+  "name": "Caua",
+  "email": "caua@teste.com",
+  "password": "senha123"
+}
+
+###
+
+### Login
+POST http://localhost:3333/auth/login
+Content-Type: application/json
+
+{
+  "email": "caua@teste.com",
+  "password": "senha123"
+}
+
+###
+
+### Tentativa de cadastro duplicado (deve dar erro)
+POST http://localhost:3333/auth/register
+Content-Type: application/json
+
+{
+  "name": "Caua Dois",
+  "email": "caua@teste.com",
+  "password": "outraSenha"
+}
+
+###
+
+### Login com senha errada (deve dar erro)
+POST http://localhost:3333/auth/login
+Content-Type: application/json
+
+{
+  "email": "caua@teste.com",
+  "password": "senhaErrada"
+}
+
+### Rota protegida SEM token (deve dar 401)
+GET http://localhost:3333/me
+
+###
+
+### Rota protegida COM token (deve dar 200)
+GET http://localhost:3333/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MTc2NDcsImV4cCI6MTc3NzUyMjQ0N30.ytl-MRnzDRD99vx3TUjR4Cw6OneJkbagb9ZswS91GHk
+
+
+### ========== PROJETOS ==========
+
+### Criar projeto (precisa de token)
+POST http://localhost:3333/projects
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MTc2NDcsImV4cCI6MTc3NzUyMjQ0N30.ytl-MRnzDRD99vx3TUjR4Cw6OneJkbagb9ZswS91GHk
+
+{
+  "name": "Meu primeiro projeto",
+  "description": "Aprendendo fullstack com Claude"
+}
+
+###
+
+### Listar projetos do usuário
+GET http://localhost:3333/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MTc2NDcsImV4cCI6MTc3NzUyMjQ0N30.ytl-MRnzDRD99vx3TUjR4Cw6OneJkbagb9ZswS91GHk
+
+###
+
+### Buscar projeto por ID
+GET http://localhost:3333/projects/ac09fe78-3672-4693-afdb-8822a4577640
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MTc2NDcsImV4cCI6MTc3NzUyMjQ0N30.ytl-MRnzDRD99vx3TUjR4Cw6OneJkbagb9ZswS91GHk
+
+###
+
+### Atualizar projeto
+PUT http://localhost:3333/projects/ac09fe78-3672-4693-afdb-8822a4577640
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MTc2NDcsImV4cCI6MTc3NzUyMjQ0N30.ytl-MRnzDRD99vx3TUjR4Cw6OneJkbagb9ZswS91GHk
+
+{
+  "name": "Projeto do Futuro",
+  "description": "Aprendendo fullstack"
+}
+
+###
+
+### Deletar projeto
+DELETE http://localhost:3333/projects/ac09fe78-3672-4693-afdb-8822a4577640
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MTc2NDcsImV4cCI6MTc3NzUyMjQ0N30.ytl-MRnzDRD99vx3TUjR4Cw6OneJkbagb9ZswS91GHk
+
+###
+
+### Tentar criar projeto SEM token (deve dar 401)
+POST http://localhost:3333/projects
+Content-Type: application/json
+
+{
+  "name": "Tentativa sem auth"
+}
+
+
+### -------------------------------------------------------------------------------------------------------------------
+
+### ========== TAREFAS ==========
+
+### Criar tarefa (precisa projectId válido)
+POST http://localhost:3333/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+{
+  "title": "Primeira tarefa",
+  "description": "Aprender backend com Claude",
+  "status": "todo",
+  "priority": "high",
+  "projectId": "ac09fe78-3672-4693-afdb-8822a4577640"
+}
+
+###
+
+### Listar TODAS as tarefas do usuário
+GET http://localhost:3333/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+
+###
+
+### Listar tarefas de UM projeto específico
+GET http://localhost:3333/tasks?projectId=ac09fe78-3672-4693-afdb-8822a4577640
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+
+###
+
+### Filtrar por status
+GET http://localhost:3333/tasks?status=todo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+
+###
+
+### Filtrar por prioridade alta
+GET http://localhost:3333/tasks?priority=high
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+
+###
+
+### Combinar filtros
+GET http://localhost:3333/tasks?status=todo&priority=high
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+
+###
+
+### Buscar tarefa específica
+GET http://localhost:3333/tasks/ID_DA_TAREFA
+Authorization: Bearer SEU_TOKEN_AQUI
+
+###
+
+### Atualizar tarefa (marcar como doing)
+PUT http://localhost:3333/tasks/474e4642-c694-4f99-aefb-6551ccb4699a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+
+
+{
+  "status": "doing"
+}
+
+###
+
+### Concluir tarefa
+PUT http://localhost:3333/tasks/474e4642-c694-4f99-aefb-6551ccb4699a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+{
+  "status": "done"
+}
+
+###
+
+### Deletar tarefa
+DELETE http://localhost:3333/tasks/474e4642-c694-4f99-aefb-6551ccb4699a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMjY2OGRhNy02YTI5LTQ3ODMtODE0My0yODI1NTc1ZjMzMTkiLCJpYXQiOjE3NzY5MjgyMjEsImV4cCI6MTc3NzUzMzAyMX0.dZFtOq3UtbJXygfLdZwAkndoQnWvdcAYLq6Va-_f-ks
+
+###
+
+### Tentar criar tarefa com status inválido (deve dar 400)
+POST http://localhost:3333/tasks
+Content-Type: application/json
+Authorization: Bearer SEU_TOKEN_AQUI
+
+{
+  "title": "Teste inválido",
+  "status": "invalido",
+  "projectId": "ID_DO_PROJETO_AQUI"
+}
