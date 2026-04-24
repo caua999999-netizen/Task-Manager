@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useProjects } from '../hooks/useProjects';
 import { Button } from '../components/Button';
@@ -7,6 +8,7 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import type { Project } from '../types';
 
 export function Dashboard() {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { projects, isLoading, error, createProject, updateProject, deleteProject } = useProjects();
 
@@ -19,9 +21,15 @@ export function Dashboard() {
     setIsModalOpen(true);
   }
 
-  function handleOpenEditModal(project: Project) {
+  function handleOpenEditModal(e: React.MouseEvent, project: Project) {
+    e.stopPropagation();
     setEditingProject(project);
     setIsModalOpen(true);
+  }
+
+  function handleOpenDeleteDialog(e: React.MouseEvent, project: Project) {
+    e.stopPropagation();
+    setDeletingProject(project);
   }
 
   function handleCloseModal() {
@@ -51,9 +59,7 @@ export function Dashboard() {
           <h1 className="text-2xl font-bold text-gray-800">Task Manager</h1>
           <div className="flex items-center gap-4">
             <span className="text-gray-600">{user?.name}</span>
-            <Button variant="secondary" onClick={logout}>
-              Sair
-            </Button>
+            <Button variant="secondary" onClick={logout}>Sair</Button>
           </div>
         </div>
       </header>
@@ -86,7 +92,8 @@ export function Dashboard() {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition"
+                onClick={() => navigate(`/projects/${project.id}`)}
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer"
               >
                 <h3 className="text-lg font-bold text-gray-800 mb-2">{project.name}</h3>
                 {project.description && (
@@ -95,14 +102,14 @@ export function Dashboard() {
                 <div className="flex gap-2 mt-4">
                   <Button
                     variant="secondary"
-                    onClick={() => handleOpenEditModal(project)}
+                    onClick={(e) => handleOpenEditModal(e, project)}
                     className="text-sm"
                   >
                     Editar
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => setDeletingProject(project)}
+                    onClick={(e) => handleOpenDeleteDialog(e, project)}
                     className="text-sm"
                   >
                     Deletar

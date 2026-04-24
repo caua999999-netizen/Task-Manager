@@ -3,6 +3,7 @@ import { useAuth } from './contexts/AuthContext';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
+import { ProjectDetails } from './pages/ProjectDetails';
 import type { ReactNode } from 'react';
 
 interface ProtectedRouteProps {
@@ -35,27 +36,19 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
+          element={<PublicRoute><Login /></PublicRoute>}
         />
         <Route
           path="/register"
-          element={
-            <PublicRoute>
-              <Register />
-            </PublicRoute>
-          }
+          element={<PublicRoute><Register /></PublicRoute>}
         />
         <Route
           path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
+        />
+        <Route
+          path="/projects/:id"
+          element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>}
         />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
       </Routes>
